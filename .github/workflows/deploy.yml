@@ -39,7 +39,7 @@ jobs:
 
       - name: Update release notes
         if: github.event_name == 'release' && github.event.action == 'published'
-        uses: actions/github-script
+        uses: actions/github-script@7
         with:
           script: |
             const releaseNotes = await github.rest.repos.getRelease({
