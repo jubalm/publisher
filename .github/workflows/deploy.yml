@@ -1,0 +1,38 @@
+name: Build and Push to IPFS
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+# Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set IMAGE_TAG
+        run: echo "IMAGE_TAG=$(echo ${{ github.repository }} | tr '[A-Z]' '[a-z]')" >> $GITHUB_ENV
+
+      - name: Build image
+        id: docker_build
+        run: |
+          docker build --file Dockerfile --tag $IMAGE_TAG .
+
+      - name: Capture build output
+        run: |
+          IPFS_HASH=$(docker run --rm $IMAGE_TAG cat /ipfs_hash.txt)
+          echo $IPFS_HASH
