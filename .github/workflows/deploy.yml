@@ -34,5 +34,24 @@ jobs:
 
       - name: Capture build output
         run: |
-          IPFS_HASH=$(docker run --rm $IMAGE_TAG cat /ipfs_hash.txt)
-          echo $IPFS_HASH
+          IPFS_HASH=$(docker run --entrypoint /bin/sh $IMAGE_TAG -c "cat /ipfs_hash.txt")
+          echo "IPFS_HASH=$IPFS_HASH" >> $GITHUB_ENV
+
+      - name: Update release notes
+        if: github.event_name == 'release' && github.event.action == 'published'
+        uses: actions/github-script
+        with:
+          script: |
+            const releaseNotes = await github.rest.repos.getRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: releaseId,
+            })
+
+            const releaseId = ${{ github.event.release.id }}
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: releaseId,
+              body: `${releaseNotes} ${process.env["IPFS_HASH"]`
+            });
