@@ -29,11 +29,10 @@ jobs:
         id: docker_build
         run: |
           docker build --file Dockerfile --tag $IMAGE_TAG .
+          echo $(docker run --entrypoint /bin/sh $IMAGE_TAG -c "cat /ipfs_hash.txt") > ipfs_hash.txt
 
       - name: Store IPFS hash
         uses: actions/upload-artifact@v4
-        run: |
-          echo $(docker run --entrypoint /bin/sh $IMAGE_TAG -c "cat /ipfs_hash.txt") > ipfs_hash.txt
         with:
           name: ipfs_hash 
           path: ipfs_hash.txt
