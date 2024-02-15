@@ -41,6 +41,7 @@ jobs:
         with:
           script: |
             console.log(process.env["IPFS_HASH"])
+            console.log('context', context)
             # const releaseNotes = await github.rest.repos.getRelease({
             #   owner: context.repo.owner,
             #   repo: context.repo.repo,
