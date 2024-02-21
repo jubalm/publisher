@@ -42,7 +42,7 @@ jobs:
           RELEASE_URL: https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}
           EVENT: ${{ github.event }}
         run: |
-          echo $EVENT
+          echo $EVENT | jq -r "."
           echo $RELEASE_URL
           curl 
             --location \
