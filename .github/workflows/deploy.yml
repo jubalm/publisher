@@ -38,14 +38,14 @@ jobs:
       - name: Create a release
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          REQUEST_BODY=$(cat <<EOF
+          REQUEST_BODY=$(cat << EOF
           {
             "name": "${{ github.ref_name }}",
             "tag_name": "${{ github.ref_name }}",
             "target_commitish": "main",
             "body": "$IPFS_HASH",
             "draft": false,
-            "generate_release_notes": true,
+            "generate_release_notes": true
           }
           EOF
           )
