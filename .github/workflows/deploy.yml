@@ -22,19 +22,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set IMAGE_TAG
-        run: echo "IMAGE_TAG=$(echo ${{ github.repository }} | tr '[A-Z]' '[a-z]')" >> $GITHUB_ENV
+        # - name: Set IMAGE_TAG
+        #   run: echo "IMAGE_TAG=$(echo ${{ github.repository }} | tr '[A-Z]' '[a-z]')" >> $GITHUB_ENV
 
-      - name: Build image
-        id: docker_build
-        run: |
-          docker build --file Dockerfile --tag $IMAGE_TAG .
+        # - name: Build image
+        #   id: docker_build
+        #   run: |
+        #     docker build --file Dockerfile --tag $IMAGE_TAG .
 
-      - name: Store IPFS hash reference
-        id: ipfs_hash
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          echo "IPFS_HASH=$(docker run --entrypoint /bin/sh $IMAGE_TAG -c 'cat /ipfs_hash.txt')" >> $GITHUB_ENV
+        # - name: Store IPFS hash reference
+        #   id: ipfs_hash
+        #   if: startsWith(github.ref, 'refs/tags/')
+        #   run: |
+        #     echo "IPFS_HASH=$(docker run --entrypoint /bin/sh $IMAGE_TAG -c 'cat /ipfs_hash.txt')" >> $GITHUB_ENV
 
       - name: Update release notes
         env:
