@@ -40,9 +40,9 @@ jobs:
         run: |
           REQUEST_BODY=$(cat << EOF
           {
-            "name": "${{ github.ref_name }}",
             "tag_name": "${{ github.ref_name }}",
             "target_commitish": "main",
+            "name": "${{ github.ref_name }}",
             "body": "$IPFS_HASH",
             "draft": false,
             "generate_release_notes": true
