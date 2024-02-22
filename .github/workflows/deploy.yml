@@ -41,4 +41,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_URL: "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }}"
         run: |
+          echo ${{ github.ref_name }}
           echo $RELEASE_URL
