@@ -44,11 +44,3 @@ jobs:
         run: |
           echo $EVENT | jq -r "."
           echo $RELEASE_URL
-          curl 
-            --location \
-            -X PATCH \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "X-GitHub-Api-Version: 2022-11-28" "
-            $RELEASE_URL \
-            -d '{"tag_name":"v1.0.0","target_commitish":"main","name":"v1.0.0","body":"Description of the release","draft":false,"prerelease":false}'
