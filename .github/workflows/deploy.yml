@@ -41,5 +41,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_URL: "https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}"
         run: |
-          echo ${{ toJson(github.event.repository.release_url) }} | jq -r "."
+          echo ${{ toJson(github.event.repository) }}
           echo $RELEASE_URL
