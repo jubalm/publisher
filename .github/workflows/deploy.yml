@@ -20,26 +20,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        # - name: Set IMAGE_TAG
-        #   run: echo "IMAGE_TAG=$(echo ${{ github.repository }} | tr '[A-Z]' '[a-z]')" >> $GITHUB_ENV
+      - name: Set IMAGE_TAG
+        run: echo "IMAGE_TAG=$(echo ${{ github.repository }} | tr '[A-Z]' '[a-z]')" >> $GITHUB_ENV
 
-        # - name: Build image
-        #   id: docker_build
-        #   run: |
-        #     docker build --file Dockerfile --tag $IMAGE_TAG .
+      - name: Build image
+        run: |
+          docker build --file Dockerfile --tag $IMAGE_TAG .
 
-        # - name: Store IPFS hash reference
-        #   id: ipfs_hash
-        #   if: startsWith(github.ref, 'refs/tags/')
-        #   run: |
-        #     echo "IPFS_HASH=$(docker run --entrypoint /bin/sh $IMAGE_TAG -c 'cat /ipfs_hash.txt')" >> $GITHUB_ENV
+      - name: Store IPFS hash reference
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo "IPFS_HASH=$(docker run --entrypoint /bin/sh $IMAGE_TAG -c 'cat /ipfs_hash.txt')" >> $GITHUB_ENV
 
-      - name: Update release notes
+      - name: Create a draft release
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_URL: "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }}"
         run: |
-          echo ${{ github.ref_name }}
-          echo $RELEASE_URL
+          curl 
+            --request POST \
+            --location \
+            --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer $GITHUB_TOKEN" \
+            --header "X-GitHub-Api-Version:  2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/releases" \
+            --data "{\"tag_name\":\"${{ github.ref_name }}\",\"target_commitish\":\"main\",\"name\":\"Test\",\"body\":\"Description of the release\",\"draft\":true,\"prerelease\":false,\"generate_release_notes\":true}"
