@@ -41,8 +41,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_URL: "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }}"
         run: |
-          curl 
-            --request POST \
+          curl --request POST \
             --location \
             --header "Accept: application/vnd.github+json" \
             --header "Authorization: Bearer $GITHUB_TOKEN" \
