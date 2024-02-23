@@ -40,14 +40,16 @@ jobs:
         env:
           REF_NAME: ${{ github.ref_name }}
         run: |
-          echo '{
+          REQUEST_DATA='{
             "tag_name": "${{ github.ref_name }}",
             "target_commitish": "main",
             "name": "${{ github.ref_name }}",
             "body": "$(echo "$IPFS_HASH")",
             "draft": false,
             "generate_release_notes": true
-          }' | curl \
+          }'
+
+          echo $REQUEST_DATA | curl \
               --silent \
               --location \
               --request POST \
