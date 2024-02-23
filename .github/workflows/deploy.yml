@@ -37,25 +37,22 @@ jobs:
 
       - name: Create a release
         if: startsWith(github.ref, 'refs/tags/')
+        env:
+          REF_NAME: ${{ github.ref_name }}
         run: |
-          REQUEST_BODY=$(cat << EOF
-          {
+          echo '{
             "tag_name": "${{ github.ref_name }}",
             "target_commitish": "main",
             "name": "${{ github.ref_name }}",
             "body": "$IPFS_HASH",
             "draft": false,
             "generate_release_notes": true
-          }
-          EOF
-          )
-
-          curl \
-            --silent \
-            --location \
-            --request POST \
-            --header "Accept: application/vnd.github+json" \
-            --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            --header "X-GitHub-Api-Version:  2022-11-28" \
-            "https://api.github.com/repos/${{ github.repository }}/releases" \
-            --data $REQUEST_BODY
+          }' | curl \
+              --silent \
+              --location \
+              --request POST \
+              --header "Accept: application/vnd.github+json" \
+              --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              --header "X-GitHub-Api-Version:  2022-11-28" \
+              --data @- \
+              https://api.github.com/repos/${{ github.repository }}/releases
