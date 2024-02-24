@@ -42,8 +42,6 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           IPFS_HASH: $IPFS_HASH
         run: |
-          #!/bin/bash
-          
           # Markdown template for the release notes
           read -r -d '' RELEASE_NOTE_TEMPLATE << EOF
           #### IPFS Hash
