@@ -40,7 +40,6 @@ jobs:
         env:
           REF_NAME: ${{ github.ref_name }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          IPFS_HASH: $IPFS_HASH
         run: |
           read -r -d '' RELEASE_NOTE_TEMPLATE << EOF
           #### IPFS Hash
