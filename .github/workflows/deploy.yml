@@ -61,27 +61,4 @@ jobs:
           [https://$IPFS_HASH.ipfs.w3s.link](https://$IPFS_HASH.ipfs.w3s.link)
           EOF
 
-          # Generate payload for creating a new release
-          read -r -d '' PAYLOAD_TEMPLATE <<EOF
-          {
-            "name": "$REF_NAME",
-            "tag_name": "$REF_NAME",
-            "target_commitish": "main",
-            "body": $(echo "$RELEASE_NOTE_TEMPLATE" | jq -cRs '@json|fromjson'),
-            "draft": false,
-            "generate_release_notes": true
-          }
-          EOF
-
-          # Create a github release
-          # https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#create-a-release
-          REQUEST_DATA=$(echo "$PAYLOAD_TEMPLATE" | jq -c)
-          echo $REQUEST_DATA | curl \
-            --silent \
-            --location \
-            --request POST \
-            --header "Accept: application/vnd.github+json" \
-            --header "Authorization: Bearer $GITHUB_TOKEN" \
-            --header "X-GitHub-Api-Version: 2022-11-28" \
-            --data @- \
-            https://api.github.com/repos/$GITHUB_REPOSITORY/releases
+          echo "$RELEASE_NOTE_TEMPLATE"
