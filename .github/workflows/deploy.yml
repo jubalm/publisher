@@ -65,8 +65,8 @@ jobs:
           # Generate payload for creating a new release
           PAYLOAD_TEMPLATE=$(cat <<EOF
           {
-            "name": "$TAG_NAME",
-            "tag_name": "$TAG_NAME",
+            "name": "$REF_NAME",
+            "tag_name": "$REF_NAME",
             "target_commitish": "main",
             "body": $(echo "$RELEASE_NOTE_TEMPLATE" | jq -cRs '@json|fromjson'),
             "draft": false,
