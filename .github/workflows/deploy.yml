@@ -31,7 +31,7 @@ jobs:
           docker build --file Dockerfile --tag $IMAGE_TAG .
 
       - name: Store IPFS hash reference
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.ref_type == 'tag'
         run: |
           echo "IPFS_HASH=$(docker run --entrypoint /bin/sh $IMAGE_TAG -c 'cat /ipfs_hash.txt')" >> $GITHUB_ENV
 
@@ -42,6 +42,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo "$GITHUB_REF_NAME"
           # Markdown template for the release notes
           RELEASE_NOTE_TEMPLATE=$(cat << EOF
           #### IPFS Hash
