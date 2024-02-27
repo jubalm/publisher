@@ -38,6 +38,8 @@ jobs:
       - name: Create a release
         if: github.ref_type == 'tag'
         env:
+          REF_NAME: ${{ github.ref_name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Markdown template for the release notes
@@ -63,8 +65,8 @@ jobs:
           # Generate payload for creating a new release
           PAYLOAD_TEMPLATE=$(cat <<EOF
           {
-            "name": "$GITHUB_REF_NAME",
-            "tag_name": "$GITHUB_REF_NAME",
+            "name": "$REF_NAME",
+            "tag_name": "$REF_NAME",
             "target_commitish": "main",
             "body": $(echo "$RELEASE_NOTE_TEMPLATE" | jq -cRs '@json|fromjson'),
             "draft": false,
@@ -98,5 +100,5 @@ jobs:
             exit 1
           fi
 
-          echo "Release ($GITHUB_REF_NAME) successfully created"
+          echo "Release ($REF_NAME) successfully created"
 
