@@ -36,7 +36,7 @@ jobs:
           echo "IPFS_HASH=$(docker run --entrypoint /bin/sh $IMAGE_TAG -c 'cat /ipfs_hash.txt')" >> $GITHUB_ENV
 
       - name: Create a release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.ref_type == 'tag'
         env:
           REF_NAME: ${{ github.ref_name }}
           GITHUB_REPOSITORY: ${{ github.repository }}
