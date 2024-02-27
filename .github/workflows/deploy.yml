@@ -65,7 +65,6 @@ jobs:
           {
             "name": "$GITHUB_REF_NAME",
             "tag_name": "$GITHUB_REF_NAME",
-            "target_commitish": "main",
             "body": $(echo "$RELEASE_NOTE_TEMPLATE" | jq -cRs '@json|fromjson'),
             "draft": false,
             "generate_release_notes": true
